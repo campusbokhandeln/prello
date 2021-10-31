@@ -6,18 +6,11 @@ use App\Actions\GetTrelloBoardAction;
 use App\Actions\GetTrelloBoardsAction;
 use App\Actions\GetTrelloCardsAction;
 use App\Actions\GetTrelloListAction;
-use App\Actions\GetTrelloListsAction;
-use App\Entities\TrelloBoard;
-use App\Entities\TrelloCard;
-use App\Entities\TrelloList;
-use App\Exceptions\InvalidSettingsException;
+use App\Entities\TrelloNull;
 use App\Services\Settings\Settings;
 use App\Services\Trello\TrelloApiGateway;
 use App\Support\TrelloMenuMaker;
 use App\Support\TrelloSelection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
 
 trait HasTrelloMenus
 {
@@ -36,20 +29,18 @@ trait HasTrelloMenus
             $menu = app(TrelloMenuMaker::class);
 
             if ($board) {
-                $lists = app(GetTrelloListsAction::class)->execute($board->id);
-
                 $menu->make(sprintf('%s -> Choose List', $board->name))
                     ->listSelection()
                     ->build()
-                    ->setTrelloBoard($board)
-                    ->addLists($lists);
+                    ->setTrelloEntity($board)
+                    ->addTrelloEntities($board->getChildren(), $board);
             } else {
                 $boards = app(GetTrelloBoardsAction::class)->execute();
 
                 $menu->make('Choose Board')
                     ->listSelection()
                     ->build()
-                    ->addBoards($boards);
+                    ->addTrelloEntities($boards, new TrelloNull);
             }
 
             $trelloSelection = $menu->open();
@@ -85,24 +76,22 @@ trait HasTrelloMenus
                 $menu->make(sprintf('%s -> Choose Card', $list->name))
                     ->cardSelection()
                     ->build()
-                    ->setTrelloBoard($board)
-                    ->setTrelloList($list)
-                    ->addCards($cards);
+                    ->setTrelloEntity($board)
+                    ->setTrelloEntity($list)
+                    ->addTrelloEntities($cards, $list);
             } else if ($board) {
-                $lists = app(GetTrelloListsAction::class)->execute($board->id);
-
                 $menu->make(sprintf('%s -> Choose List', $board->name))
                     ->cardSelection()
                     ->build()
-                    ->setTrelloBoard($board)
-                    ->addLists($lists);
+                    ->setTrelloEntity($board)
+                    ->addTrelloEntities($board->getChildren(), $board);
             } else {
                 $boards = app(GetTrelloBoardsAction::class)->execute();
 
                 $menu->make('Choose Board')
                     ->cardSelection()
                     ->build()
-                    ->addBoards($boards);
+                    ->addTrelloEntities($boards, new TrelloNull());
             }
 
             $trelloSelection = $menu->open();

@@ -2,7 +2,9 @@
 
 namespace App\Entities;
 
-class TrelloBoard
+use App\Support\TrelloSelection;
+
+class TrelloBoard implements TrelloEntity
 {
 
     /**
@@ -30,5 +32,28 @@ class TrelloBoard
             url: $board['url'],
             lists: $lists->toArray(),
         );
+    }
+
+    public function setTrelloSelection(TrelloSelection $trelloSelection)
+    {
+        $trelloSelection->trelloBoard = $this;
+    }
+
+    /**
+     * @return TrelloEntity[]|TrelloList[]
+     */
+    public function getChildren(): array
+    {
+        return $this->lists;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getTitle(): string
+    {
+        return sprintf('%s -> Select List', $this->name);
     }
 }

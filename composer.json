@@ -1,18 +1,18 @@
 {
-    "name": "laravel-zero/laravel-zero",
-    "description": "The Laravel Zero Framework.",
+    "name": "campusbokhandeln/prello",
+    "description": "Prello.",
     "keywords": ["framework", "laravel", "laravel zero", "console", "cli"],
-    "homepage": "https://laravel-zero.com",
+    "homepage": "https://github.com/campusbokhandeln/prello",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel-zero/laravel-zero/issues",
-        "source": "https://github.com/laravel-zero/laravel-zero"
+        "issues": "https://github.com/campusbokhandeln/prello/issues",
+        "source": "https://github.com/campusbokhandeln/prello"
     },
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "Campus",
+            "email": "tech@campusbokhandeln.se"
         }
     ],
     "require": {
@@ -21,10 +21,11 @@
         "illuminate/http": "^8.0",
         "illuminate/log": "^8.0",
         "laminas/laminas-text": "^2.8",
-        "laravel-zero/framework": "^8.8",
+        "laravel-zero/phar-updater": "^1.0.6",
         "nunomaduro/laravel-console-menu": "^3.2"
     },
     "require-dev": {
+        "laravel-zero/framework": "^8.8",
         "mockery/mockery": "^1.4.3",
         "pestphp/pest": "^1.3"
     },
@@ -45,5 +46,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["prello"]
+    "bin": ["builds/prello"]
 }

@@ -2,7 +2,9 @@
 
 namespace App\Entities;
 
-class TrelloCard
+use App\Support\TrelloSelection;
+
+class TrelloCard implements TrelloEntity
 {
     public function __construct(
         public string $id,
@@ -25,5 +27,28 @@ class TrelloCard
             shortUrl: $card['shortUrl'],
             idList: $card['idList'],
         );
+    }
+
+    public function setTrelloSelection(TrelloSelection $trelloSelection)
+    {
+        $trelloSelection->trelloCard = $this;
+    }
+
+    /**
+     * @return TrelloEntity[]
+     */
+    public function getChildren(): array
+    {
+        return [];
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getTitle(): string
+    {
+        return 'Select Card';
     }
 }
