@@ -3,8 +3,6 @@
 namespace App\Support;
 
 use App\Actions\GetTrelloBoardsAction;
-use App\Actions\GetTrelloCardsAction;
-use App\Actions\GetTrelloListsAction;
 use App\Entities\TrelloBoard;
 use App\Entities\TrelloCard;
 use App\Entities\TrelloEntity;
@@ -12,9 +10,6 @@ use App\Entities\TrelloList;
 use App\Entities\TrelloNull;
 use Illuminate\Support\Collection;
 use NunoMaduro\LaravelConsoleMenu\Menu;
-use PhpSchool\CliMenu\Action\ExitAction;
-use PhpSchool\CliMenu\Action\GoBackAction;
-use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 
@@ -86,10 +81,8 @@ class TrelloMenuMaker
                     );
                 });
 
-            if($parent->getName() == 'null') {
-                $this->cliMenu->setItems([]);
-            }
-
+            // Clear Items.
+            $this->cliMenu->setItems([]);
             $this->cliMenu->setTitle($parent->getTitle());
 
             $backItem = new SelectableItem(
@@ -101,7 +94,7 @@ class TrelloMenuMaker
             $this->cliMenu->setSelectedItem($backItem);
             $this->cliMenu->addItems($childItems->toArray());
 
-            if($parent->getName() == 'null' && $this->cliMenu->isOpen()) {
+            if($this->cliMenu->isOpen()) {
                 $this->cliMenu->redraw();
             }
         };
@@ -162,14 +155,8 @@ class TrelloMenuMaker
 
                 $cb = function (CliMenu $cliMenu = null) use ($trelloEntity) {
                     $trelloEntity->setTrelloSelection($this->trelloSelection);
-
-                    $cliMenu->setItems([]);
-
                     $children = $trelloEntity->getChildren();
-
                     $this->addTrelloEntities($children, $trelloEntity)($cliMenu);
-
-                    $cliMenu->redraw();
                 };
 
                 $cb($cliMenu);

@@ -43,9 +43,12 @@ class CheckoutCommand extends Command
 
         $branch = $getBranchName->execute($result->trelloBoard, $result->trelloCard);
 
-        try {
-            $this->info(sprintf("Checkout %s", $branch));
+        if(! $this->confirm(sprintf("Checkout %s", $branch))) {
+            $this->info('exiting..');
+            return;
+        }
 
+        try {
             $this->task(
                 "Checkout branch {$branch}",
                 fn() => $checkoutBranch->execute($branch)
