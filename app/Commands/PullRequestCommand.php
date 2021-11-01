@@ -47,7 +47,10 @@ class PullRequestCommand extends Command
         $branch = $getBranchName->execute($result->trelloBoard, $result->trelloCard);
         $pullRequestDto = new PullRequestDto($result->trelloCard->name, $result->trelloCard->name);
 
-        $this->info(sprintf("Checkout and create PR for: %s", $branch));
+        if(! $this->confirm(sprintf("Checkout and create PR for: %s", $branch))) {
+            $this->info('exiting..');
+            return;
+        }
 
         try {
             $this->task(
