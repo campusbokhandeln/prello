@@ -18,7 +18,7 @@ class TodoCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'todo {title?} {--title=} {--desc=}';
+    protected $signature = 'todo {title?} {--title=} {--desc=} {--pr} {--checkout}';
 
     /**
      * The description of the command.
@@ -48,13 +48,24 @@ class TodoCommand extends Command
             fn() => $this->createdCard = $createTrelloCard->execute($result->trelloList, $card)
         );
 
+        // Create PR
+        if ($this->option('pr')) {
+            $this->call(PullRequestCommand::class, [
+                '--card' => $this->createdCard->id,
+            ]);
+        } elseif ($this->option('checkout')) {
+            $this->call(CheckoutCommand::class, [
+                '--card' => $this->createdCard->id,
+            ]);
+        }
+
         $this->printResult();
     }
 
     protected function askUserForNewCard(): NewTrelloCardDto
     {
         try {
-            if($title = $this->argument('title')) {
+            if ($title = $this->argument('title')) {
                 return new NewTrelloCardDto($title, '');
             }
 
