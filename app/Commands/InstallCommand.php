@@ -78,6 +78,7 @@ class InstallCommand extends Command
 
             return true;
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
             return false;
         }
     }
