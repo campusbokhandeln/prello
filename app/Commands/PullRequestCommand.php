@@ -6,6 +6,8 @@ use App\Actions\GetBranchNameFromTrelloBoardAction as GetBranchName;
 use App\Actions\GitCheckoutBranchAction as CheckoutBranch;
 use App\Actions\GitPullRequestAction as PullRequest;
 use App\DataTransferObjects\PullRequestDto;
+use App\Services\Trello\TrelloApiGateway;
+use App\Support\TrelloSelection;
 use App\Traits\HasTrelloMenus;
 use App\Traits\InteractsWithGitRepo;
 use LaravelZero\Framework\Commands\Command;
@@ -21,7 +23,7 @@ class PullRequestCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'pr';
+    protected $signature = 'pr {--card=}';
 
     /**
      * The description of the command.
@@ -41,13 +43,13 @@ class PullRequestCommand extends Command
     {
         $this->ensureFolderHasGitRepo();
 
-        $result = $this->getCard(config('prello.settings.pr.lastBoardId'), config('prello.settings.pr.lastListId'));
+        $result = $this->getTrelloSelection();
         $this->saveTrelloSelectionFor('pr', $result);
 
         $branch = $getBranchName->execute($result->trelloBoard, $result->trelloCard);
         $pullRequestDto = new PullRequestDto($result->trelloCard->name, $result->trelloCard->name);
 
-        if(! $this->confirm(sprintf("Checkout and create PR for: %s", $branch))) {
+        if (!$this->confirm(sprintf("Checkout and create PR for: %s", $branch))) {
             $this->info('exiting..');
             return;
         }
@@ -68,5 +70,26 @@ class PullRequestCommand extends Command
         } catch (ProcessFailedException $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    public function getTrelloSelection(): TrelloSelection
+    {
+        // Create PR
+        if ($cardId = $this->option('card')) {
+            try {
+                $trello = app(TrelloApiGateway::class);
+                $card = $trello->card()->findById($cardId);
+                $list = $trello->list()->findById($card->idList);
+                $board = $trello->board()->findById($list->idBoard);
+
+                return new TrelloSelection($board, $list, $card);
+
+            } catch (\Throwable $e) {
+                $this->error('Card not found');
+                exit();
+            }
+        }
+
+        return $this->getCard(config('prello.settings.pr.lastBoardId'), config('prello.settings.pr.lastListId'));
     }
 }
