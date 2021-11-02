@@ -29,7 +29,7 @@ trait HasTrelloMenus
             $menu = app(TrelloMenuMaker::class);
 
             if ($board) {
-                $menu->make(sprintf('%s -> Choose List', $board->name))
+                $menu->make(sprintf('%s -> Choose List', $board->getName()))
                     ->listSelection()
                     ->build()
                     ->setTrelloEntity($board)
@@ -73,14 +73,14 @@ trait HasTrelloMenus
 
                 $cards = app(GetTrelloCardsAction::class)->execute($list->id);
 
-                $menu->make(sprintf('%s -> Choose Card', $list->name))
+                $menu->make(sprintf('%s -> Choose Card', $list->getName()))
                     ->cardSelection()
                     ->build()
                     ->setTrelloEntity($board)
                     ->setTrelloEntity($list)
                     ->addTrelloEntities($cards, $list);
             } else if ($board) {
-                $menu->make(sprintf('%s -> Choose List', $board->name))
+                $menu->make(sprintf('%s -> Choose List', $board->getName()))
                     ->cardSelection()
                     ->build()
                     ->setTrelloEntity($board)

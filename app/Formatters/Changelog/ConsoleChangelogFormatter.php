@@ -23,7 +23,7 @@ class ConsoleChangelogFormatter implements ChangelogFormatter
     {
         $cardRows = collect($cards)
             ->map(fn(TrelloCard $card) => [
-                "- {$card->name}",
+                "- {$card->getName()}",
             ]);
 
         $this->command->title($title);
