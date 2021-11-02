@@ -18,6 +18,8 @@ class Card extends AbstractTrello
         return
             $this->get("lists/{$listId}/cards", [
                 'fields' => 'all',
+                'members' => true,
+                'member_fields' => 'all'
             ])
                 ->map(function ($card) {
                     return TrelloCard::fromRequest($card);
