@@ -18,5 +18,9 @@ if (!function_exists('server_home')) {
         }
         return empty($home) ? NULL : $home;
     }
+
+    function base_dir() {
+        return server_home() . config('app.auth.basedir');
+    }
 }
 

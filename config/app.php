@@ -59,7 +59,7 @@ return [
 
 
     'auth' => [
-        'filename' => server_home() . '/.prello/auth.json',
-        'basedir' => server_home() . '/.prello/',
+        'filename' => 'auth.json',
+        'basedir' => '/.prello/',
     ],
 ];

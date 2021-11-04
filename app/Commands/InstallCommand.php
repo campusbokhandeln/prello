@@ -51,22 +51,22 @@ class InstallCommand extends Command
                 'token' => $this->token,
             ]);
 
-            $authFileName = config('app.auth.filename');
+            $authFileName = base_dir() . config('app.auth.filename');
 
-            $this->line('Saving config to: '. $authFileName);
+            $this->line('Saving config to: ' . $authFileName);
 
-            if(! File::isDirectory(config('app.auth.basedir'))) {
-                File::makeDirectory(config('app.auth.basedir'));
+            if (!File::isDirectory(base_dir())) {
+                File::makeDirectory(base_dir());
             }
 
             // Auth.
             File::put($authFileName, $authData);
 
             // Settings
-            File::put(config('app.auth.basedir')."settings.json", json_encode([
+            File::put(base_dir() . "settings.json", json_encode([
                 'pr' => [
-                  'lastBoardId' => null,
-                  'lastListId' => null,
+                    'lastBoardId' => null,
+                    'lastListId' => null,
                 ],
                 'changelog' => [
                     'lastBoardId' => null,

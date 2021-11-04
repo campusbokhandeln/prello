@@ -52,7 +52,7 @@ class Kernel extends BaseKernel
         }
 
         try {
-            $auth = json_decode(File::get(config('app.auth.filename')), true);
+            $auth = json_decode(File::get(base_dir() . config('app.auth.filename')), true);
             Config::set('prello.auth', $auth);
         } catch (\Throwable $e) {
             throw InvalidAuthException::create();
@@ -72,13 +72,13 @@ class Kernel extends BaseKernel
         }
 
         try {
-            File::get(config('app.auth.filename'));
+            File::get(base_dir() . config('app.auth.filename'));
         } catch (\Throwable $e) {
             throw InvalidAuthException::create();
         }
 
         try {
-            File::get(config('app.auth.basedir') . 'settings.json');
+            File::get(base_dir() . 'settings.json');
         } catch (\Exception $e) {
             throw InvalidSettingsException::create();
         }
