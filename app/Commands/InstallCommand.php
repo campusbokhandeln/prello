@@ -53,6 +53,8 @@ class InstallCommand extends Command
 
             $authFileName = config('app.auth.filename');
 
+            $this->line('Saving config to: '. $authFileName);
+
             if(! File::isDirectory(config('app.auth.basedir'))) {
                 File::makeDirectory(config('app.auth.basedir'));
             }
