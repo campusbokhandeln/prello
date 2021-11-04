@@ -17,7 +17,7 @@ class Settings
     public function load()
     {
         try {
-            $this->settings = json_decode(File::get(config('app.auth.basedir') . 'settings.json'), true);
+            $this->settings = json_decode(File::get(base_dir() . 'settings.json'), true);
             Config::set('prello.settings', $this->settings);
         } catch (\Throwable $e) {
             throw InvalidSettingsException::create();
@@ -45,7 +45,7 @@ class Settings
         $data = config('prello.settings');
 
         File::put(
-            config('app.auth.basedir') . 'settings.json',
+            base_dir() . 'settings.json',
             json_encode($data),
         );
     }

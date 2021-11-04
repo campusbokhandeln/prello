@@ -59,7 +59,7 @@ class Kernel extends BaseKernel
         }
 
         $settings = app(Settings::class);
-        $settings->load();;
+        $settings->load();
     }
 
     public function checkRequirements()
