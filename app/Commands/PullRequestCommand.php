@@ -43,6 +43,11 @@ class PullRequestCommand extends Command
     {
         $this->ensureFolderHasGitRepo();
 
+        if(! $this->ensureCurrentBranchIsCorrect()) {
+            $this->info('exiting..');
+            return;
+        }
+
         $result = $this->getTrelloSelection();
         $this->saveTrelloSelectionFor('pr', $result);
 
