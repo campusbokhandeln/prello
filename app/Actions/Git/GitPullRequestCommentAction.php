@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Git;
 
 use App\DataTransferObjects\GitPullRequestCommentDto;
 use Symfony\Component\Process\Exception\ProcessFailedException;

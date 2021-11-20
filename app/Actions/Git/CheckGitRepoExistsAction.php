@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Git;
 
 use Illuminate\Support\Facades\File;
 

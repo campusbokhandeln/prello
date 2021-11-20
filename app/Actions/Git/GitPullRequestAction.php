@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Git;
 
+use App\Actions\CreateTrelloCardUrlAttachmentAction;
+use App\Actions\Git\GitPullRequestCommentAction;
 use App\DataTransferObjects\PullRequestDto;
 use App\DataTransferObjects\GitPullRequestCommentDto;
 use App\Entities\TrelloCard;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use function tap;
 
 class GitPullRequestAction
 {

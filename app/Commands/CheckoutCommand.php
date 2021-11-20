@@ -4,7 +4,7 @@ namespace App\Commands;
 
 
 use App\Actions\GetBranchNameFromTrelloBoardAction as GetBranchName;
-use App\Actions\GitCheckoutBranchAction as CheckoutBranch;
+use App\Actions\Git\GitCheckoutBranchAction as CheckoutBranch;
 use App\Services\Trello\TrelloApiGateway;
 use App\Support\TrelloSelection;
 use App\Traits\HasTrelloMenus;
@@ -40,9 +40,14 @@ class CheckoutCommand extends Command
     {
         $this->ensureFolderHasGitRepo();
 
+        if(! $this->ensureRepoIsClean()) {
+            $this->alert('Repo has unstaged changes!!');
+            return 0;
+        }
+
         if(! $this->ensureCurrentBranchIsCorrect()) {
-            $this->info('exiting..');
-            return;
+            $this->alert('Exiting..');
+            return 0;
         }
 
         $result = $this->getTrelloSelection();
@@ -52,7 +57,7 @@ class CheckoutCommand extends Command
 
         if(! $this->confirm(sprintf("Checkout %s", $branch))) {
             $this->info('exiting..');
-            return;
+            return 0;
         }
 
         try {

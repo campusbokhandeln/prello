@@ -3,8 +3,8 @@
 namespace App\Commands;
 
 use App\Actions\GetBranchNameFromTrelloBoardAction as GetBranchName;
-use App\Actions\GitCheckoutBranchAction as CheckoutBranch;
-use App\Actions\GitPullRequestAction as PullRequest;
+use App\Actions\Git\GitCheckoutBranchAction as CheckoutBranch;
+use App\Actions\Git\GitPullRequestAction as PullRequest;
 use App\DataTransferObjects\PullRequestDto;
 use App\Services\Trello\TrelloApiGateway;
 use App\Support\TrelloSelection;
@@ -43,9 +43,14 @@ class PullRequestCommand extends Command
     {
         $this->ensureFolderHasGitRepo();
 
+        if(! $this->ensureRepoIsClean()) {
+            $this->alert('Repo has unstaged changes!!');
+            return 0;
+        }
+
         if(! $this->ensureCurrentBranchIsCorrect()) {
-            $this->info('exiting..');
-            return;
+            $this->alert('Exiting..');
+            return 0;
         }
 
         $result = $this->getTrelloSelection();
@@ -56,7 +61,7 @@ class PullRequestCommand extends Command
 
         if (!$this->confirm(sprintf("Checkout and create PR for: %s", $branch))) {
             $this->info('exiting..');
-            return;
+            return 0;
         }
 
         try {
