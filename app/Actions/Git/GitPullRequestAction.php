@@ -9,7 +9,6 @@ use App\DataTransferObjects\GitPullRequestCommentDto;
 use App\Entities\TrelloCard;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
-use function tap;
 
 class GitPullRequestAction
 {
