@@ -15,7 +15,7 @@ trait InteractsWithGitRepo
         }
     }
 
-    public function ensureCurrentBranchIsCorrect()
+    public function ensureCurrentBranchIsCorrect(): bool
     {
         $currentBranch = GitGetCurrentBranchAction::execute();
 
